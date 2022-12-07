@@ -1,0 +1,17 @@
+[
+    {
+        "id":"1",
+        "usuario":"lautaro",
+        "contrasena":"123456"
+    },
+    {
+        "id":"1",
+        "usuario":"tomas",
+        "contrasena":"123456"
+    },
+    {
+        "id":"1",
+        "usuario":"santiago",
+        "contrasena":"123456"
+    }
+]
