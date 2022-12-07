@@ -1,0 +1,11 @@
+[
+    {
+        "id":"1",
+        "titulo":"Shrek",
+        "ano":"2001",
+        "director":"Tomás",
+        "generos":["Comedia","Drama"],
+        "sinopsis":"Un ogro re sarpado",
+        "imagen":""
+    }
+]
