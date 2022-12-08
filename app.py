@@ -6,17 +6,17 @@ from http import HTTPStatus
 app = Flask(__name__)
 
 #Leer JSONs
-with open ('jsons/usuarios.json','r') as j:
-    usuarios = json.load(j)
+with open ('jsons/usuarios.json','r') as archivoJson:
+    usuarios = json.load(archivoJson)
 
-with open ('jsons/peliculas.json','r') as j:
-    peliculas = json.load(j)
+with open ('jsons/peliculas.json','r') as archivoJson:
+    peliculas = json.load(archivoJson)
 
-with open ('jsons/directores.json','r') as j:
-    directores = json.load(j)
+with open ('jsons/directores.json','r') as archivoJson:
+    directores = json.load(archivoJson)
 
-with open ('jsons/generos.json','r') as j:
-    generos = json.load(j)
+with open ('jsons/generos.json','r') as archivoJson:
+    generos = json.load(archivoJson)
 
 #Rutas API
 
@@ -45,7 +45,7 @@ def getPeliculasByPortada():
     return jsonify(peliculasByPortada)
 
 #ABM peliculas
-@app.route("/peliculas/")
+@app.route("/peliculas")
 def getPeliculas():
     return jsonify(peliculas)
 
@@ -108,24 +108,14 @@ def opcionIniciarSesion():
 
 def menuUsuario():
     opcion = 0
-    while not(opcion>=1 and opcion<=4):
+    while not(opcion>=1 and opcion<=5):
         system("cls")
         print('=====================')
         print('1) Ver ultimas 10 peliculas agregadas')
         print('2) Agregar pelicula')
-        print('2) Modificar pelicula')
-        print('3) Borrar pelicula')
-        print('4) Buscar pelicula por ID')
-        print('=====================')
-        opcion = int(input('Ingrese opcion: '))
-    return opcion
-
-def menuInvitado():
-    opcion = 0
-    while not(opcion == 1):
-        system("cls")
-        print('=====================')
-        print('1) Ver ultimas 10 peliculas agregadas')
+        print('3) Modificar pelicula')
+        print('4) Borrar pelicula')
+        print('5) Buscar pelicula por ID o titulo')
         print('=====================')
         opcion = int(input('Ingrese opcion: '))
     return opcion
@@ -148,9 +138,10 @@ def ultimasDiezPeliculas():
 
 def getPeliculaByCodigo():
     system("cls")
-    idBuscar = input('Ingrese la id o titulo: ')
+    encontrada = False
+    buscar = input('Ingrese la id o titulo: ')
     for pelicula in peliculas:
-        if pelicula["id"] == idBuscar or pelicula["titulo"] == idBuscar:
+        if pelicula["id"] == buscar or pelicula["titulo"].lower() == buscar:
             print(f'ID {pelicula["id"]} = La pelicula {pelicula["titulo"]} salio en el año {pelicula["ano"]}, el director fue {directores[int(pelicula["idDirector"])-1]["nombre"]}, ', end='')
             print('tiene los generos ', end="")
             for generoPelis in pelicula["idGeneros"]:
@@ -158,12 +149,16 @@ def getPeliculaByCodigo():
                     if genero["id"] == generoPelis:
                         print(genero["nombre"].lower(),', ', end="")
             print('La sinopsis es:', pelicula["sinopsis"])
+            encontrada = True
+    if encontrada == False:
+        print('No fue encontradada')
     input('Ingrese enter para continuar...')
 
 def main():
     opcionMenuBienvennida = 0
     while opcionMenuBienvennida != 3:
         opcionMenuBienvennida = MenuBienvenida()
+        #Inicio sesion
         if opcionMenuBienvennida == 1:
             opcionIniciarSesion()
             opcion = menuUsuario()
@@ -171,9 +166,8 @@ def main():
                 ultimasDiezPeliculas()
             if opcion == 4:
                 getPeliculaByCodigo()
+        #Invitado
         if opcionMenuBienvennida == 2:
-            opcion = menuInvitado()
-            if opcion == 1:
                 ultimasDiezPeliculas()
 
 main()
