@@ -136,6 +136,22 @@ def ultimasDiezPeliculas():
             break
     input('Ingrese enter para continuar...')
 
+def borrarPelicula():
+    system("cls")
+    print('=====================')
+    borrar = input('Ingrese el id o el nombre de la pelicula que desea borrar: ')
+    print('=====================')
+    for pelicula in peliculas:
+        if pelicula["id"] == borrar or pelicula["titulo"].lower() == borrar:
+            peliculas.remove(pelicula)
+            encontrada = True
+    if encontrada == False:
+        print('No se pudo borrar porque no existe')
+    print('Borrado exitoso')
+    with open('jsons/peliculas.json', 'w') as archivoJson:
+        json.dump(peliculas, archivoJson, indent=4)
+    input('Ingrese enter para continuar...')
+
 def getPeliculaByCodigo():
     system("cls")
     encontrada = False
@@ -165,6 +181,8 @@ def main():
             if opcion == 1:
                 ultimasDiezPeliculas()
             if opcion == 4:
+                borrarPelicula()
+            if opcion == 5:
                 getPeliculaByCodigo()
         #Invitado
         if opcionMenuBienvennida == 2:
