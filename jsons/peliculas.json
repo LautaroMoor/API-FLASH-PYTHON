@@ -1,17 +1,5 @@
 [
     {
-        "id": "1",
-        "titulo": "Shrek",
-        "ano": "2001",
-        "idDirector": "1",
-        "idGeneros": [
-            "1",
-            "2"
-        ],
-        "sinopsis": "Un ogro re sarpado",
-        "imagen": ""
-    },
-    {
         "id": "2",
         "titulo": "Shrek",
         "ano": "2001",
