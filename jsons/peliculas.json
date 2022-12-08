@@ -7,5 +7,95 @@
         "idGeneros":["1","2"],
         "sinopsis":"Un ogro re sarpado",
         "imagen":""
+    },
+    {
+        "id":"2",
+        "titulo":"Shrek",
+        "ano":"2001",
+        "idDirector":1,
+        "idGeneros":["1","2"],
+        "sinopsis":"Un ogro re sarpado",
+        "imagen":""
+    },
+    {
+        "id":"3",
+        "titulo":"Shrek",
+        "ano":"2001",
+        "idDirector":1,
+        "idGeneros":["1","2"],
+        "sinopsis":"Un ogro re sarpado",
+        "imagen":""
+    },
+    {
+        "id":"4",
+        "titulo":"Shrek",
+        "ano":"2001",
+        "idDirector":1,
+        "idGeneros":["1","2"],
+        "sinopsis":"Un ogro re sarpado",
+        "imagen":""
+    },
+    {
+        "id":"5",
+        "titulo":"Shrek",
+        "ano":"2001",
+        "idDirector":1,
+        "idGeneros":["1","2"],
+        "sinopsis":"Un ogro re sarpado",
+        "imagen":""
+    },
+    {
+        "id":"6",
+        "titulo":"Shrek",
+        "ano":"2001",
+        "idDirector":1,
+        "idGeneros":["1","2"],
+        "sinopsis":"Un ogro re sarpado",
+        "imagen":""
+    },
+    {
+        "id":"7",
+        "titulo":"Shrek",
+        "ano":"2001",
+        "idDirector":1,
+        "idGeneros":["1","2"],
+        "sinopsis":"Un ogro re sarpado",
+        "imagen":""
+    },
+    {
+        "id":"8",
+        "titulo":"Shrek",
+        "ano":"2001",
+        "idDirector":1,
+        "idGeneros":["1","2"],
+        "sinopsis":"Un ogro re sarpado",
+        "imagen":""
+    },
+    {
+        "id":"9",
+        "titulo":"Shrek",
+        "ano":"2001",
+        "idDirector":1,
+        "idGeneros":["1","2"],
+        "sinopsis":"Un ogro re sarpado",
+        "imagen":""
+    },
+    {
+        "id":"10",
+        "titulo":"Shrek",
+        "ano":"2001",
+        "idDirector":1,
+        "idGeneros":["1","2"],
+        "sinopsis":"Un ogro re sarpado",
+        "imagen":""
+    },
+    {
+        "id":"11",
+        "titulo":"Shrek",
+        "ano":"2001",
+        "idDirector":1,
+        "idGeneros":["1","2"],
+        "sinopsis":"Un ogro re sarpado",
+        "imagen":""
     }
 ]
