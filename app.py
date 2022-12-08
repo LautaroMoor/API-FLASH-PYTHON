@@ -53,9 +53,14 @@ def getPeliculas():
 def savePelicula(id):
     return 2
 
-@app.route("/peliculas/delete/<id>", methods=['POST'])
+@app.route("/peliculas/delete/<id>", methods=['DELETE'])
 def deletePelicula(id):
-    return 2
+    for pelicula in peliculas:
+        if pelicula["id"] == id:
+            peliculas.remove(pelicula)
+            with open('jsons/peliculas.json', 'w') as f:
+                json.dump(peliculas, f, indent=4)
+            return jsonify(peliculas)
 
 @app.route("/peliculas/<id>")
 def getPeliculaByCodigo(id):
