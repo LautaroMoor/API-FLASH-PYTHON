@@ -1,6 +1,7 @@
-from flask import Flask 
+from flask import Flask, jsonify, Response
 import json
 from os import system
+from http import HTTPStatus
 
 app = Flask(__name__)
 
@@ -16,6 +17,52 @@ with open ('jsons/directores.json','r') as j:
 
 with open ('jsons/generos.json','r') as j:
     generos = json.load(j)
+
+#Rutas API
+
+@app.route("/directores")
+def getDirectores():
+    return jsonify(directores)
+
+@app.route("/generos")
+def getGeneros():
+    return jsonify(generos)
+
+@app.route("/peliculas/director/<id>")
+def getPeliculasByDirector(id):
+    peliculasByDirector = []
+    for pelicula in peliculas:
+        if pelicula["idDirector"] == id:
+            peliculasByDirector.append(pelicula)
+    return jsonify(peliculasByDirector)
+
+@app.route("/peliculas/imagen")
+def getPeliculasByPortada():
+    peliculasByPortada = []
+    for pelicula in peliculas:
+        if pelicula["imagen"] != '':
+            peliculasByPortada.append(pelicula)
+    return jsonify(peliculasByPortada)
+
+#ABM peliculas
+@app.route("/peliculas/")
+def getPeliculas():
+    return jsonify(peliculas)
+
+@app.route("/peliculas/save/<id>", methods=['POST'])
+def savePelicula(id):
+    return 2
+
+@app.route("/peliculas/delete/<id>", methods=['POST'])
+def deletePelicula(id):
+    return 2
+
+@app.route("/peliculas/<id>")
+def getPeliculaByCodigo(id):
+    for pelicula in peliculas:
+        if pelicula["id"] == id:
+            return jsonify(pelicula)
+    return Response("{}", status=HTTPStatus.NOT_FOUND)
 
 def MenuBienvenida():
     opcion = 0
