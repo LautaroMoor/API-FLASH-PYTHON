@@ -49,17 +49,25 @@ def getPeliculasByPortada():
 def getPeliculas():
     return jsonify(peliculas)
 
-@app.route("/peliculas/save/<id>", methods=['POST'])
-def savePelicula(id):
-    return 2
+@app.route("/peliculas/save/<id>/titulo/<titulo>/ano/<ano>/idDirector/<idDirector>/sinopsis/<sinopsis>", methods=['PUT'])
+def savePelicula(id,titulo,ano,idDirector,sinopsis):
+    for pelicula in peliculas:
+        if pelicula["id"] == id:
+            pelicula["titulo"] = titulo
+            pelicula["ano"] = ano
+            pelicula["idDirector"] = idDirector
+            pelicula["sinopsis"] = sinopsis
+    with open('jsons/peliculas.json', 'w') as archivoJson:
+        json.dump(peliculas, archivoJson, indent=4)
+    return jsonify(peliculas)
 
 @app.route("/peliculas/delete/<id>", methods=['DELETE'])
 def deletePelicula(id):
     for pelicula in peliculas:
         if pelicula["id"] == id:
             peliculas.remove(pelicula)
-            with open('jsons/peliculas.json', 'w') as f:
-                json.dump(peliculas, f, indent=4)
+            with open('jsons/peliculas.json', 'w') as archivoJson:
+                json.dump(peliculas, archivoJson, indent=4)
             return jsonify(peliculas)
 
 @app.route("/peliculas/<id>")
@@ -69,6 +77,7 @@ def getPeliculaByCodigo(id):
             return jsonify(pelicula)
     return Response("{}", status=HTTPStatus.NOT_FOUND)
 
+#Programa
 def MenuBienvenida():
     opcion = 0
     while not(opcion>=1 and opcion<=3):
