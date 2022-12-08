@@ -135,7 +135,7 @@ def ultimasDiezPeliculas():
     system("cls")
     for pelicula in reversed(peliculas):
         contador = contador + 1
-        print(f'ID {pelicula["id"]} = La pelicula {pelicula["titulo"]} salio en el año {pelicula["ano"]}, el director fue {directores[pelicula["idDirector"]]["nombre"]}, ', end='')
+        print(f'ID {pelicula["id"]} = La pelicula {pelicula["titulo"]} salio en el año {pelicula["ano"]}, el director fue {directores[int(pelicula["idDirector"])-1]["nombre"]}, ', end='')
         print('tiene los generos ', end="")
         for generoPelis in pelicula["idGeneros"]:
             for genero in generos:
@@ -144,6 +144,20 @@ def ultimasDiezPeliculas():
         print('La sinopsis es:', pelicula["sinopsis"])
         if contador == 10:
             break
+    input('Ingrese enter para continuar...')
+
+def getPeliculaByCodigo():
+    system("cls")
+    idBuscar = input('Ingrese la id o titulo: ')
+    for pelicula in peliculas:
+        if pelicula["id"] == idBuscar or pelicula["titulo"] == idBuscar:
+            print(f'ID {pelicula["id"]} = La pelicula {pelicula["titulo"]} salio en el año {pelicula["ano"]}, el director fue {directores[int(pelicula["idDirector"])-1]["nombre"]}, ', end='')
+            print('tiene los generos ', end="")
+            for generoPelis in pelicula["idGeneros"]:
+                for genero in generos:
+                    if genero["id"] == generoPelis:
+                        print(genero["nombre"].lower(),', ', end="")
+            print('La sinopsis es:', pelicula["sinopsis"])
     input('Ingrese enter para continuar...')
 
 def main():
@@ -155,6 +169,8 @@ def main():
             opcion = menuUsuario()
             if opcion == 1:
                 ultimasDiezPeliculas()
+            if opcion == 4:
+                getPeliculaByCodigo()
         if opcionMenuBienvennida == 2:
             opcion = menuInvitado()
             if opcion == 1:
