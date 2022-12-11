@@ -143,7 +143,7 @@ def borrarPelicula():
     borrar = input('Ingrese el id o el nombre de la pelicula que desea borrar: ')
     print('=====================')
     for pelicula in peliculas:
-        if pelicula["id"] == borrar or pelicula["titulo"].lower() == borrar:
+        if pelicula["id"] == borrar or pelicula["titulo"].lower() == borrar.lower():
             peliculas.remove(pelicula)
             encontrada = True
     if encontrada == False:

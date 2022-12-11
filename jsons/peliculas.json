@@ -12,7 +12,8 @@
         "imagen": "Una imagen re cheta",
         "idComentarios": [
             "1",
-            "2"
+            "2",
+            "6"
         ]
     },
     {
@@ -27,7 +28,8 @@
         "sinopsis": "Un ogro re sarpado",
         "imagen": "Una imagen re cheta",
         "idComentarios": [
-            "1"
+            "1",
+            "7"
         ]
     },
     {
@@ -42,22 +44,8 @@
         "sinopsis": "Un ogro re sarpado",
         "imagen": "Una imagen re cheta",
         "idComentarios": [
-            "1"
-        ]
-    },
-    {
-        "id": "4",
-        "titulo": "Shrek",
-        "ano": "2001",
-        "idDirector": "1",
-        "idGeneros": [
             "1",
-            "2"
-        ],
-        "sinopsis": "Un ogro re sarpado",
-        "imagen": "Una imagen re cheta",
-        "idComentarios": [
-            "1"
+            "8"
         ]
     },
     {
@@ -72,7 +60,8 @@
         "sinopsis": "Un ogro re sarpado",
         "imagen": "Una imagen re cheta",
         "idComentarios": [
-            "1"
+            "1",
+            "10"
         ]
     },
     {
@@ -87,7 +76,8 @@
         "sinopsis": "Un ogro re sarpado",
         "imagen": "Una imagen re cheta",
         "idComentarios": [
-            "1"
+            "1",
+            "11"
         ]
     },
     {
@@ -102,7 +92,8 @@
         "sinopsis": "Un ogro re sarpado",
         "imagen": "Una imagen re cheta",
         "idComentarios": [
-            "1"
+            "1",
+            "12"
         ]
     },
     {
@@ -117,7 +108,8 @@
         "sinopsis": "Un ogro re sarpado",
         "imagen": "Una imagen re cheta",
         "idComentarios": [
-            "1"
+            "1",
+            "13"
         ]
     },
     {
@@ -132,7 +124,8 @@
         "sinopsis": "Un ogro re sarpado",
         "imagen": "Una imagen re cheta",
         "idComentarios": [
-            "1"
+            "1",
+            "14"
         ]
     },
     {
@@ -162,7 +155,8 @@
         "sinopsis": "Un ogro re sarpado",
         "imagen": "Una imagen re cheta",
         "idComentarios": [
-            "1"
+            "1",
+            "16"
         ]
     }
 ]
