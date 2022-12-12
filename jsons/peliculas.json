@@ -45,7 +45,7 @@
     },
     {
         "id": "5",
-        "titulo": "Lautaro",
+        "titulo": "santi",
         "ano": "2002",
         "idDirector": "2",
         "idGenero": "1",
@@ -125,6 +125,36 @@
         "idGenero": "1",
         "sinopsis": "Un ogro re sarpado",
         "imagen": "Una imagen re cheta",
+        "idComentarios": []
+    },
+    {
+        "id": "13",
+        "titulo": "lautaro",
+        "ano": "2002",
+        "idDirector": "2",
+        "idGenero": "1",
+        "sinopsis": "4",
+        "imagen": "2",
+        "idComentarios": []
+    },
+    {
+        "id": "14",
+        "titulo": "santiago",
+        "ano": "2003",
+        "idDirector": "2",
+        "idGenero": "1",
+        "sinopsis": "3",
+        "imagen": "2",
+        "idComentarios": []
+    },
+    {
+        "id": "15",
+        "titulo": "hola",
+        "ano": "2002",
+        "idDirector": "1",
+        "idGenero": "2",
+        "sinopsis": "3",
+        "imagen": "4",
         "idComentarios": []
     }
 ]

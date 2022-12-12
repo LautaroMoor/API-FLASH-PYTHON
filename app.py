@@ -85,7 +85,8 @@ def MenuBienvenida():
     while not(opcion>=1 and opcion<=3):
         system("cls")
         print('=====================')
-        print('Bienvenido:')
+        print('\tBienvenido')
+        print('=====================')
         print('1) Iniciar sesion')
         print('2) Ingresar como invitado')
         print('3) Para salir')
@@ -96,7 +97,11 @@ def MenuBienvenida():
 #LOGEO USUARIO
 def opcionIniciarSesion():
     system("cls")
+    exitoso = False
     while True:
+        system('cls')
+        print('=====================')
+        print('Inicio sesion usuarios')
         print('=====================')
         usuarioIngresado = input('Ingrese su usuario: ').lower()
         contrasenaIngresada =  input('Ingrese su contrasena: ').lower()
@@ -105,12 +110,17 @@ def opcionIniciarSesion():
             if usuario["usuario"] == usuarioIngresado and usuario["contrasena"] == contrasenaIngresada:
                 input('Logeo exitoso!! Enter para continuar!')
                 return usuario["id"]
+        if exitoso==False:
+            print('Error al logear!')
+            input('Enter para volver a intentarlo...')
 
 #MENU USUARIO LOGEADO
 def menuUsuario():
     opcion = 0
     while not(opcion>=1 and opcion<=7):
         system("cls")
+        print('=====================')
+        print('\tMenu principal')
         print('=====================')
         print('1) Ver ultimas 10 peliculas agregadas')
         print('2) Agregar pelicula')
@@ -137,60 +147,14 @@ la sinopsis es "{pelicula["sinopsis"]}" y la imagen es {pelicula["imagen"]}')
     input('Ingrese enter para continuar...')
 
 #Opcion 2
-def menuDirectores(anterior = None):
-    opcion = 0
-    while not(opcion>=1 and opcion<=contador):
-        system("cls")
-        contador = 0
-        if anterior != None:
-            for director in directores:
-                if director['id'] == anterior:
-                    print(f'El director actual es {director["nombre"]}')
-        print('=====================')
-        print("Los directores disponibles son:")
-        print('=====================')
-        for director in directores:
-            contador = contador + 1
-            print(f'{contador}) {director["nombre"]}')
-        print('=====================')
-        opcion= int(input("Ingrese opcion: "))
-        if not(opcion>=1 and opcion<=contador):
-            system("cls")
-            print('=====================')
-            print(f"{opcion} no es una ID válida.")
-            print('=====================')
-    return str(opcion)
-
-def menuGeneros(anterior = None):
-    opcion = 0
-    while not(opcion>=1 and opcion<=contador):
-        system("cls")
-        contador = 0
-        if anterior != None:
-            for genero in generos:
-                if genero['id'] == anterior:
-                    print(f'El genero actual es {genero["nombre"]}')
-        print('=====================')
-        print("Los generos disponibles son:")
-        print('=====================')
-        for genero in generos:
-            contador = contador + 1
-            print(f'{genero["id"]}) {genero["nombre"]}')
-        print('=====================')
-        opcion= int(input("Ingrese opcion: "))
-        if not(opcion>=1 and opcion<=contador):
-            system("cls")
-            print('=====================')
-            print(f"{opcion} no es una ID válida.")
-            print('=====================')
-    return str(opcion)
-    
 def agregarPelicula():
     system ("cls")
-    idPeliculaNuevo = int(peliculas[-1]["id"]) + 1
+    idPeliculaNueva = int(peliculas[-1]["id"]) + 1
     print('=====================')
     print("registrar pelicula")
     print('=====================')
+    input('Enter para proseguir...')
+    system("cls")
     titulo=input("Ingrese titulo: ")
     while (titulo == ""):
         system ("cls")
@@ -198,6 +162,7 @@ def agregarPelicula():
         print("El titulo no puede estar vacío.")
         print('=====================')
         titulo=input("Ingrese titulo: ")
+    system("cls")
     ano=input("Ingrese año de la pelicula: ")
     while (len(ano) != 4):
         system("cls")
@@ -205,8 +170,9 @@ def agregarPelicula():
         print(ano, "no es un año valido.")
         print("=====================")
         ano=input("Ingrese año de la pelicula: ")
-    opcionDirector=menuDirectores()
+    idDirector=menuDirectores()
     idGenero=menuGeneros()
+    system("cls")
     sinopsis=input("Ingrese sinopsis: ")
     while (sinopsis == ""):
         system ("cls")
@@ -214,9 +180,21 @@ def agregarPelicula():
         print("la sinopsis no puede estar vacía.")
         print('=====================')
         sinopsis=input("Ingrese sinopsis: ")
+    system("cls")
     imagen=input("Ingrese URL imagen: ")
-    # for peliculas
-    # peliculas[]
+    while (imagen == ""):
+        system ("cls")
+        print('=====================')
+        print("Es necesaria una URL de imagen.")
+        print('=====================')
+        imagen=input("Ingrese URL imagen: ")
+    nuevaPelicula={"id":str(idPeliculaNueva),"titulo":titulo, "ano":ano, "idDirector":idDirector, "idGenero":idGenero, "sinopsis":sinopsis, "imagen":imagen, "idComentarios":[]}
+    peliculas.append(nuevaPelicula)
+    print("=====================")
+    print("Pelicula registrada correctamente.")
+    print("=====================")
+    with open('jsons/peliculas.json', 'w') as archivoJson:
+        json.dump(peliculas, archivoJson, indent=4)
 
 #Opcion 3
 def modificarPelicula():
@@ -283,27 +261,6 @@ def modificarPelicula():
     else:
         print('Error')
 
-def modificacionExitosa():
-    print('Modificacion exitosa')
-    input('Pulse enter para seguir modificando...')
-
-def menuModificar():
-    opcion = 0
-    while not(opcion>=1 and opcion<=7):
-        system('cls')  
-        print('=====================')
-        print('Menu editor')
-        print('=====================')
-        print('1) Titulo')
-        print('2) Año')
-        print('3) Director')
-        print('4) Generos')
-        print('5) Sinopsis')
-        print('6) Imagen')
-        print('7) Terminar/Salir')
-        print('=====================')
-        opcion = int(input('Opcion: ')) 
-    return opcion
 #Opcion 4
 def borrarPelicula():
     encontrada = False
@@ -318,7 +275,8 @@ def borrarPelicula():
             encontrada = True
     if encontrada == False:
         print('No se pudo borrar porque no existe')
-    print('Borrado exitoso')
+    else:
+        print('Borrado exitoso')
     with open('jsons/peliculas.json', 'w') as archivoJson:
         json.dump(peliculas, archivoJson, indent=4)
     input('Ingrese enter para continuar...')
@@ -338,7 +296,7 @@ def getPeliculaByCodigo():
         print('No fue encontradada')
     input('Ingrese enter para continuar...')
 
-#MENU COMENTARIOS
+#MENU COMENTARIOS OPCION 6
 def menuComentarios():
     opcion = 0
     while not(opcion>=1 and opcion<=5):
@@ -457,6 +415,80 @@ def modificarComentario(idUsuario):
         print('Error al modificar')
     input('Ingrese enter para continuar...')
 
+#MENU DIRECTORES
+def menuDirectores(anterior = None):
+    system("cls")
+    opcion = 0
+    while not(opcion>=1 and opcion<=contador):
+        contador = 0
+        if anterior != None:
+            for director in directores:
+                if director['id'] == anterior:
+                    print(f'El director actual es {director["nombre"]}')
+        print('=====================')
+        print("Los directores disponibles son:")
+        print('=====================')
+        for director in directores:
+            contador = contador + 1
+            print(f'{contador}) {director["nombre"]}')
+        print('=====================')
+        opcion= int(input("Ingrese opcion: "))
+        if not(opcion>=1 and opcion<=contador):
+            system("cls")
+            print('=====================')
+            print(f"{opcion} no es una ID válida.")
+            print('=====================')
+    return str(opcion)
+
+#MENU GENEROS
+def menuGeneros(anterior = None):
+    opcion = 0
+    while not(opcion>=1 and opcion<=contador):
+        system("cls")
+        contador = 0
+        if anterior != None:
+            for genero in generos:
+                if genero['id'] == anterior:
+                    print(f'El genero actual es {genero["nombre"]}')
+        print('=====================')
+        print("Los generos disponibles son:")
+        print('=====================')
+        for genero in generos:
+            contador = contador + 1
+            print(f'{genero["id"]}) {genero["nombre"]}')
+        print('=====================')
+        opcion= int(input("Ingrese opcion: "))
+        if not(opcion>=1 and opcion<=contador):
+            system("cls")
+            print('=====================')
+            print(f"{opcion} no es una ID válida.")
+            print('=====================')
+    return str(opcion)
+
+#MENU MODIFICACION EXITOSA
+def modificacionExitosa():
+    print('Modificacion exitosa')
+    input('Pulse enter para seguir modificando...')
+
+#MENU MODIFICAR
+def menuModificar():
+    opcion = 0
+    while not(opcion>=1 and opcion<=7):
+        system('cls')  
+        print('=====================')
+        print('Menu editor')
+        print('=====================')
+        print('1) Titulo')
+        print('2) Año')
+        print('3) Director')
+        print('4) Generos')
+        print('5) Sinopsis')
+        print('6) Imagen')
+        print('7) Terminar/Salir')
+        print('=====================')
+        opcion = int(input('Opcion: ')) 
+    return opcion
+
 def main():
     opcionMenuBienvennida = 0
     while opcionMenuBienvennida != 3:
@@ -486,7 +518,6 @@ def main():
                         modificarComentario(idUsuario)
                 if opcion == 7:
                     break
-
 
         #Invitado
         if opcionMenuBienvennida == 2:
