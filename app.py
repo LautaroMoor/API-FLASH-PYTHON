@@ -22,7 +22,6 @@ with open ('jsons/comentarios.json','r') as archivoJson:
     comentarios = json.load(archivoJson)
 
 #Rutas API
-
 @app.route("/directores")
 def getDirectores():
     return jsonify(directores)
@@ -80,7 +79,7 @@ def getPeliculaByCodigo(id):
             return jsonify(pelicula)
     return Response("{}", status=HTTPStatus.NOT_FOUND)
 
-#Programa
+#MENU PRINCIPAL
 def MenuBienvenida():
     opcion = 0
     while not(opcion>=1 and opcion<=3):
@@ -94,6 +93,7 @@ def MenuBienvenida():
         opcion = int(input('Ingresar opcion: '))
     return opcion
 
+#LOGEO USUARIO
 def opcionIniciarSesion():
     system("cls")
     while True:
@@ -106,6 +106,7 @@ def opcionIniciarSesion():
                 input('Logeo exitoso!! Enter para continuar!')
                 return usuario["id"]
 
+#MENU USUARIO LOGEADO
 def menuUsuario():
     opcion = 0
     while not(opcion>=1 and opcion<=6):
@@ -121,6 +122,7 @@ def menuUsuario():
         opcion = int(input('Ingrese opcion: '))
     return opcion
 
+#Opcion 1
 def ultimasDiezPeliculas():
     contador = 0
     system("cls")
@@ -137,6 +139,13 @@ def ultimasDiezPeliculas():
             break
     input('Ingrese enter para continuar...')
 
+#Opcion 2
+# funcion
+
+#Opcion 3
+# funcion
+
+#Opcion 4
 def borrarPelicula():
     system("cls")
     print('=====================')
@@ -153,6 +162,7 @@ def borrarPelicula():
         json.dump(peliculas, archivoJson, indent=4)
     input('Ingrese enter para continuar...')
 
+#Opcion 5
 def getPeliculaByCodigo():
     system("cls")
     encontrada = False
@@ -171,6 +181,7 @@ def getPeliculaByCodigo():
         print('No fue encontradada')
     input('Ingrese enter para continuar...')
 
+#MENU COMENTARIOS
 def menuComentarios():
     opcion = 0
     while not(opcion>=1 and opcion<=5):
@@ -184,6 +195,7 @@ def menuComentarios():
         opcion = int(input('Ingrese opcion: '))
     return opcion
 
+#Opcion 6 opcion 1
 def agregarComentario(idUsuario):
     encontrada = False
     agregar = input("Ingrese ID o Nombre de la pelicula: ")
@@ -205,7 +217,7 @@ def agregarComentario(idUsuario):
             json.dump(comentarios, archivoJson, indent=4)
     input('Ingrese enter para continuar...')
 
-
+#Opcion 6 opcion 2
 def eliminarComentario(idUsuario):
     listaComentariosUsuario = []
     encontrada = False
@@ -246,7 +258,8 @@ def eliminarComentario(idUsuario):
     else:
         print('Error al borrar')
     input('Ingrese enter para continuar...')
-    
+
+#Opcion 6 opcion 3
 def modificarComentario(idUsuario):
     listaComentariosUsuario = []
     encontrada = False
@@ -297,6 +310,10 @@ def main():
             opcion = menuUsuario()
             if opcion == 1:
                 ultimasDiezPeliculas()
+            # if opcion == 2:
+                # LLAMADO A FUNCION
+            # if opcion == 3:
+                # LLAMADO A FUNCION
             if opcion == 4:
                 borrarPelicula()
             if opcion == 5:
