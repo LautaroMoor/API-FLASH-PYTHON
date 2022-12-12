@@ -4,139 +4,7 @@
         "titulo": "Shrek",
         "ano": "2001",
         "idDirector": "1",
-        "idGeneros": [
-            "1",
-            "2"
-        ],
-        "sinopsis": "Un ogro re sarpado",
-        "imagen": "Una imagen re cheta",
-        "idComentarios": [
-            "1",
-            "2",
-            "6"
-        ]
-    },
-    {
-        "id": "2",
-        "titulo": "Shrek",
-        "ano": "2001",
-        "idDirector": "1",
-        "idGeneros": [
-            "1",
-            "2"
-        ],
-        "sinopsis": "Un ogro re sarpado",
-        "imagen": "Una imagen re cheta",
-        "idComentarios": [
-            "1",
-            "7"
-        ]
-    },
-    {
-        "id": "3",
-        "titulo": "Shrek",
-        "ano": "2001",
-        "idDirector": "1",
-        "idGeneros": [
-            "1",
-            "2"
-        ],
-        "sinopsis": "Un ogro re sarpado",
-        "imagen": "Una imagen re cheta",
-        "idComentarios": [
-            "1",
-            "8"
-        ]
-    },
-    {
-        "id": "5",
-        "titulo": "Shrek",
-        "ano": "2001",
-        "idDirector": "1",
-        "idGeneros": [
-            "1",
-            "2"
-        ],
-        "sinopsis": "Un ogro re sarpado",
-        "imagen": "Una imagen re cheta",
-        "idComentarios": [
-            "1",
-            "10"
-        ]
-    },
-    {
-        "id": "6",
-        "titulo": "Shrek",
-        "ano": "2001",
-        "idDirector": "1",
-        "idGeneros": [
-            "1",
-            "2"
-        ],
-        "sinopsis": "Un ogro re sarpado",
-        "imagen": "Una imagen re cheta",
-        "idComentarios": [
-            "1",
-            "11"
-        ]
-    },
-    {
-        "id": "7",
-        "titulo": "Shrek",
-        "ano": "2001",
-        "idDirector": "1",
-        "idGeneros": [
-            "1",
-            "2"
-        ],
-        "sinopsis": "Un ogro re sarpado",
-        "imagen": "Una imagen re cheta",
-        "idComentarios": [
-            "1",
-            "12"
-        ]
-    },
-    {
-        "id": "8",
-        "titulo": "Shrek",
-        "ano": "2001",
-        "idDirector": "1",
-        "idGeneros": [
-            "1",
-            "2"
-        ],
-        "sinopsis": "Un ogro re sarpado",
-        "imagen": "Una imagen re cheta",
-        "idComentarios": [
-            "1",
-            "13"
-        ]
-    },
-    {
-        "id": "9",
-        "titulo": "Shrek",
-        "ano": "2001",
-        "idDirector": "1",
-        "idGeneros": [
-            "1",
-            "2"
-        ],
-        "sinopsis": "Un ogro re sarpado",
-        "imagen": "Una imagen re cheta",
-        "idComentarios": [
-            "1",
-            "14"
-        ]
-    },
-    {
-        "id": "10",
-        "titulo": "Shrek",
-        "ano": "2001",
-        "idDirector": "1",
-        "idGeneros": [
-            "1",
-            "2"
-        ],
+        "idGenero": "1",
         "sinopsis": "Un ogro re sarpado",
         "imagen": "Una imagen re cheta",
         "idComentarios": [
@@ -144,19 +12,119 @@
         ]
     },
     {
+        "id": "2",
+        "titulo": "Shrek",
+        "ano": "2001",
+        "idDirector": "1",
+        "idGenero": "1",
+        "sinopsis": "Un ogro re sarpado",
+        "imagen": "Una imagen re cheta",
+        "idComentarios": []
+    },
+    {
+        "id": "3",
+        "titulo": "Shrek",
+        "ano": "2001",
+        "idDirector": "1",
+        "idGenero": "2",
+        "sinopsis": "Un ogro re sarpado",
+        "imagen": "Una imagen re cheta",
+        "idComentarios": [
+            "1"
+        ]
+    },
+    {
+        "id": "4",
+        "titulo": "Shrek",
+        "ano": "2001",
+        "idDirector": "1",
+        "idGenero": "1",
+        "sinopsis": "Un ogro re sarpado",
+        "imagen": "Una imagen re cheta",
+        "idComentarios": []
+    },
+    {
+        "id": "5",
+        "titulo": "Lautaro",
+        "ano": "2002",
+        "idDirector": "2",
+        "idGenero": "1",
+        "sinopsis": "no se",
+        "imagen": "no sseeesese",
+        "idComentarios": [
+            "1"
+        ]
+    },
+    {
+        "id": "6",
+        "titulo": "Lautaro capo",
+        "ano": "2001",
+        "idDirector": "1",
+        "idGenero": "1",
+        "sinopsis": "Un ogro re sarpado",
+        "imagen": "Una imagen re cheta",
+        "idComentarios": []
+    },
+    {
+        "id": "7",
+        "titulo": "Shrek",
+        "ano": "2001",
+        "idDirector": "1",
+        "idGenero": "1",
+        "sinopsis": "Un ogro re sarpado",
+        "imagen": "Una imagen re cheta",
+        "idComentarios": [
+            "1"
+        ]
+    },
+    {
+        "id": "8",
+        "titulo": "Shrek",
+        "ano": "2001",
+        "idDirector": "1",
+        "idGenero": "1",
+        "sinopsis": "Un ogro re sarpado",
+        "imagen": "Una imagen re cheta",
+        "idComentarios": []
+    },
+    {
+        "id": "9",
+        "titulo": "Shrek",
+        "ano": "2001",
+        "idDirector": "1",
+        "idGenero": "1",
+        "sinopsis": "Un ogro re sarpado",
+        "imagen": "Una imagen re cheta",
+        "idComentarios": []
+    },
+    {
+        "id": "10",
+        "titulo": "Shrek",
+        "ano": "2001",
+        "idDirector": "1",
+        "idGenero": "1",
+        "sinopsis": "Un ogro re sarpado",
+        "imagen": "Una imagen re cheta",
+        "idComentarios": []
+    },
+    {
         "id": "11",
         "titulo": "Shrek",
         "ano": "2001",
         "idDirector": "1",
-        "idGeneros": [
-            "1",
-            "2"
-        ],
+        "idGenero": "1",
         "sinopsis": "Un ogro re sarpado",
         "imagen": "Una imagen re cheta",
-        "idComentarios": [
-            "1",
-            "16"
-        ]
+        "idComentarios": []
+    },
+    {
+        "id": "12",
+        "titulo": "Shrek",
+        "ano": "2001",
+        "idDirector": "1",
+        "idGenero": "1",
+        "sinopsis": "Un ogro re sarpado",
+        "imagen": "Una imagen re cheta",
+        "idComentarios": []
     }
 ]

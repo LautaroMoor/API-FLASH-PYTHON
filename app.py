@@ -109,7 +109,7 @@ def opcionIniciarSesion():
 #MENU USUARIO LOGEADO
 def menuUsuario():
     opcion = 0
-    while not(opcion>=1 and opcion<=6):
+    while not(opcion>=1 and opcion<=7):
         system("cls")
         print('=====================')
         print('1) Ver ultimas 10 peliculas agregadas')
@@ -118,6 +118,7 @@ def menuUsuario():
         print('4) Borrar pelicula')
         print('5) Buscar pelicula por ID o titulo')
         print('6) Comentarios')
+        print('7) Salir/Deslogear')
         print('=====================')
         opcion = int(input('Ingrese opcion: '))
     return opcion
@@ -128,29 +129,189 @@ def ultimasDiezPeliculas():
     system("cls")
     for pelicula in reversed(peliculas):
         contador = contador + 1
-        print(f'ID {pelicula["id"]} = La pelicula {pelicula["titulo"]} salio en el año {pelicula["ano"]}, el director fue {directores[int(pelicula["idDirector"])-1]["nombre"]}, ', end='')
-        print('tiene los generos ', end="")
-        for generoPelis in pelicula["idGeneros"]:
-            for genero in generos:
-                if genero["id"] == generoPelis:
-                    print(genero["nombre"].lower(),', ', end="")
-        print('La sinopsis es:', pelicula["sinopsis"])
+        print(f'ID {pelicula["id"]} = La pelicula {pelicula["titulo"]} salio en el año {pelicula["ano"]}, \
+el director fue {directores[int(pelicula["idDirector"])-1]["nombre"]}, el genero es {generos[int(pelicula["idGenero"])-1]["nombre"]}, \
+la sinopsis es "{pelicula["sinopsis"]}" y la imagen es {pelicula["imagen"]}')
         if contador == 10:
             break
     input('Ingrese enter para continuar...')
 
 #Opcion 2
-# funcion
+def menuDirectores(anterior = None):
+    opcion = 0
+    while not(opcion>=1 and opcion<=contador):
+        system("cls")
+        contador = 0
+        if anterior != None:
+            for director in directores:
+                if director['id'] == anterior:
+                    print(f'El director actual es {director["nombre"]}')
+        print('=====================')
+        print("Los directores disponibles son:")
+        print('=====================')
+        for director in directores:
+            contador = contador + 1
+            print(f'{contador}) {director["nombre"]}')
+        print('=====================')
+        opcion= int(input("Ingrese opcion: "))
+        if not(opcion>=1 and opcion<=contador):
+            system("cls")
+            print('=====================')
+            print(f"{opcion} no es una ID válida.")
+            print('=====================')
+    return str(opcion)
+
+def menuGeneros(anterior = None):
+    opcion = 0
+    while not(opcion>=1 and opcion<=contador):
+        system("cls")
+        contador = 0
+        if anterior != None:
+            for genero in generos:
+                if genero['id'] == anterior:
+                    print(f'El genero actual es {genero["nombre"]}')
+        print('=====================')
+        print("Los generos disponibles son:")
+        print('=====================')
+        for genero in generos:
+            contador = contador + 1
+            print(f'{genero["id"]}) {genero["nombre"]}')
+        print('=====================')
+        opcion= int(input("Ingrese opcion: "))
+        if not(opcion>=1 and opcion<=contador):
+            system("cls")
+            print('=====================')
+            print(f"{opcion} no es una ID válida.")
+            print('=====================')
+    return str(opcion)
+    
+def agregarPelicula():
+    system ("cls")
+    idPeliculaNuevo = int(peliculas[-1]["id"]) + 1
+    print('=====================')
+    print("registrar pelicula")
+    print('=====================')
+    titulo=input("Ingrese titulo: ")
+    while (titulo == ""):
+        system ("cls")
+        print('=====================')
+        print("El titulo no puede estar vacío.")
+        print('=====================')
+        titulo=input("Ingrese titulo: ")
+    ano=input("Ingrese año de la pelicula: ")
+    while (len(ano) != 4):
+        system("cls")
+        print("=====================")
+        print(ano, "no es un año valido.")
+        print("=====================")
+        ano=input("Ingrese año de la pelicula: ")
+    opcionDirector=menuDirectores()
+    idGenero=menuGeneros()
+    sinopsis=input("Ingrese sinopsis: ")
+    while (sinopsis == ""):
+        system ("cls")
+        print('=====================')
+        print("la sinopsis no puede estar vacía.")
+        print('=====================')
+        sinopsis=input("Ingrese sinopsis: ")
+    imagen=input("Ingrese URL imagen: ")
+    # for peliculas
+    # peliculas[]
 
 #Opcion 3
-# funcion
+def modificarPelicula():
+    opcion = 0
+    system('cls') 
+    print('=====================')
+    print('Modificar una pelicula')
+    print('=====================')
+    modificar = input('Ingrese id o titulo de la pelicula: ')
+    for pelicula in peliculas:
+        if pelicula["id"] == modificar or pelicula["titulo"].lower() == modificar.lower():
+            encontrada = True
+            while opcion != 7:
+                opcion = menuModificar()
+                if opcion == 1:
+                    while True:
+                        valor = input(f"El titulo actualmente es '{pelicula['titulo']}', Cual es el titulo modificado?:")
+                        if valor != '':
+                            pelicula['titulo'] = valor
+                            modificacionExitosa()
+                            break
+                        else:
+                            print('Error, ponga minimo una letra')
+                elif opcion == 2:
+                    while True:
+                        valor = input(f"El ano es '{pelicula['ano']}', Cual es el ano modificado?:")
+                        if len(valor) == 4:
+                            pelicula['ano'] = valor
+                            modificacionExitosa()
+                            break
+                        else:
+                            print('Error, ingrese un ano de cuatro cifras')
+                elif opcion == 3:
+                    valor = menuDirectores(pelicula['idDirector'])
+                    pelicula['idDirector'] = valor
+                    modificacionExitosa()
+                elif opcion == 4:
+                    valor = menuGeneros(pelicula['idGenero'])
+                    pelicula['idGenero'] = valor
+                    modificacionExitosa()
+                elif opcion == 5:
+                    while True:
+                        valor = input(f"La sinopsis es '{pelicula['sinopsis']}', Cual es la sinopsis modificada?:")
+                        if valor != '':
+                            pelicula['sinopsis'] = valor
+                            modificacionExitosa()
+                            break
+                        else:
+                            print('Error, ponga minimo una letra')
+                elif opcion == 6:
+                    while True:
+                        valor= input(f"El imagen es '{pelicula['imagen']}', Cual es la imagen modificada?:")
+                        if valor != '':
+                            pelicula['imagen']  = valor
+                            modificacionExitosa()
+                            break
+                        else:
+                            print('Error, ponga minimo una letra')
+                
+    if encontrada == True:
+        print('Pelicula modificada exitosamente')
+        with open('jsons/peliculas.json', 'w') as archivoJson:
+            json.dump(peliculas, archivoJson, indent=4)
+    else:
+        print('Error')
 
+def modificacionExitosa():
+    print('Modificacion exitosa')
+    input('Pulse enter para seguir modificando...')
+
+def menuModificar():
+    opcion = 0
+    while not(opcion>=1 and opcion<=7):
+        system('cls')  
+        print('=====================')
+        print('Menu editor')
+        print('=====================')
+        print('1) Titulo')
+        print('2) Año')
+        print('3) Director')
+        print('4) Generos')
+        print('5) Sinopsis')
+        print('6) Imagen')
+        print('7) Terminar/Salir')
+        print('=====================')
+        opcion = int(input('Opcion: ')) 
+    return opcion
 #Opcion 4
 def borrarPelicula():
+    encontrada = False
     system("cls")
     print('=====================')
-    borrar = input('Ingrese el id o el nombre de la pelicula que desea borrar: ')
+    print('Borrar una pelicula')
     print('=====================')
+    borrar = input('Ingrese el id o el nombre de la pelicula que desea borrar: ')
     for pelicula in peliculas:
         if pelicula["id"] == borrar or pelicula["titulo"].lower() == borrar.lower():
             peliculas.remove(pelicula)
@@ -169,13 +330,9 @@ def getPeliculaByCodigo():
     buscar = input('Ingrese la id o titulo: ')
     for pelicula in peliculas:
         if pelicula["id"] == buscar or pelicula["titulo"].lower() == buscar:
-            print(f'ID {pelicula["id"]} = La pelicula {pelicula["titulo"]} salio en el año {pelicula["ano"]}, el director fue {directores[int(pelicula["idDirector"])-1]["nombre"]}, ', end='')
-            print('tiene los generos ', end="")
-            for generoPelis in pelicula["idGeneros"]:
-                for genero in generos:
-                    if genero["id"] == generoPelis:
-                        print(genero["nombre"].lower(),', ', end="")
-            print('La sinopsis es:', pelicula["sinopsis"])
+            print(f'ID {pelicula["id"]} = La pelicula {pelicula["titulo"]} salio en el año {pelicula["ano"]}, \
+                el director fue {directores[int(pelicula["idDirector"])-1]["nombre"]}, el genero es {generos[int(pelicula["idGenero"])-1]["nombre"]}\
+                la sinopsis es "{pelicula["sinopsis"]}" y la imagen es {pelicula["imagen"]}')
             encontrada = True
     if encontrada == False:
         print('No fue encontradada')
@@ -307,25 +464,28 @@ def main():
         #Inicio sesion
         if opcionMenuBienvennida == 1:
             idUsuario=opcionIniciarSesion()
-            opcion = menuUsuario()
-            if opcion == 1:
-                ultimasDiezPeliculas()
-            # if opcion == 2:
-                # LLAMADO A FUNCION
-            # if opcion == 3:
-                # LLAMADO A FUNCION
-            if opcion == 4:
-                borrarPelicula()
-            if opcion == 5:
-                getPeliculaByCodigo()
-            if opcion == 6:
-                opcionComentario = menuComentarios()
-                if opcionComentario == 1:
-                    agregarComentario(idUsuario)
-                elif opcionComentario == 2:
-                    eliminarComentario(idUsuario)
-                else:
-                    modificarComentario(idUsuario)
+            while True:
+                opcion = menuUsuario()
+                if opcion == 1:
+                    ultimasDiezPeliculas()
+                if opcion == 2:
+                    agregarPelicula()
+                if opcion == 3:
+                    modificarPelicula()
+                if opcion == 4:
+                    borrarPelicula()
+                if opcion == 5:
+                    getPeliculaByCodigo()
+                if opcion == 6:
+                    opcionComentario = menuComentarios()
+                    if opcionComentario == 1:
+                        agregarComentario(idUsuario)
+                    elif opcionComentario == 2:
+                        eliminarComentario(idUsuario)
+                    else:
+                        modificarComentario(idUsuario)
+                if opcion == 7:
+                    break
 
 
         #Invitado
