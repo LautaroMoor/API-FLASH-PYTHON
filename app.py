@@ -6,19 +6,19 @@ from http import HTTPStatus
 app = Flask(__name__)
 
 #Leer JSONs
-with open ('jsons/usuarios.json','r') as archivoJson:
+with open ('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/usuarios.json','r') as archivoJson:
     usuarios = json.load(archivoJson)
 
-with open ('jsons/peliculas.json','r') as archivoJson:
+with open ('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json','r') as archivoJson:
     peliculas = json.load(archivoJson)
 
-with open ('jsons/directores.json','r') as archivoJson:
+with open ('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/directores.json','r') as archivoJson:
     directores = json.load(archivoJson)
 
-with open ('jsons/generos.json','r') as archivoJson:
+with open ('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/generos.json','r') as archivoJson:
     generos = json.load(archivoJson)
 
-with open ('jsons/comentarios.json','r') as archivoJson:
+with open ('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/comentarios.json','r') as archivoJson:
     comentarios = json.load(archivoJson)
 
 #Rutas API
@@ -59,7 +59,7 @@ def savePelicula(id,titulo,ano,idDirector,sinopsis):
             pelicula["ano"] = ano
             pelicula["idDirector"] = idDirector
             pelicula["sinopsis"] = sinopsis
-    with open('jsons/peliculas.json', 'w') as archivoJson:
+    with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
         json.dump(peliculas, archivoJson, indent=4)
     return jsonify(peliculas)
 
@@ -68,7 +68,7 @@ def deletePelicula(id):
     for pelicula in peliculas:
         if pelicula["id"] == id:
             peliculas.remove(pelicula)
-            with open('jsons/peliculas.json', 'w') as archivoJson:
+            with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
                 json.dump(peliculas, archivoJson, indent=4)
             return jsonify(peliculas)
 
@@ -153,8 +153,6 @@ def agregarPelicula():
     print('=====================')
     print("registrar pelicula")
     print('=====================')
-    input('Enter para proseguir...')
-    system("cls")
     titulo=input("Ingrese titulo: ")
     while (titulo == ""):
         system ("cls")
@@ -193,7 +191,7 @@ def agregarPelicula():
     print("=====================")
     print("Pelicula registrada correctamente.")
     print("=====================")
-    with open('jsons/peliculas.json', 'w') as archivoJson:
+    with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
         json.dump(peliculas, archivoJson, indent=4)
 
 #Opcion 3
@@ -256,7 +254,7 @@ def modificarPelicula():
                 
     if encontrada == True:
         print('Pelicula modificada exitosamente')
-        with open('jsons/peliculas.json', 'w') as archivoJson:
+        with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
             json.dump(peliculas, archivoJson, indent=4)
     else:
         print('Error')
@@ -277,7 +275,7 @@ def borrarPelicula():
         print('No se pudo borrar porque no existe')
     else:
         print('Borrado exitoso')
-    with open('jsons/peliculas.json', 'w') as archivoJson:
+    with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
         json.dump(peliculas, archivoJson, indent=4)
     input('Ingrese enter para continuar...')
 
@@ -326,9 +324,9 @@ def agregarComentario(idUsuario):
         print('Error al intentar crear un nuevo comentario!')
     else:    
         print('Comentario exitoso!!')
-        with open('jsons/peliculas.json', 'w') as archivoJson:
+        with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
             json.dump(peliculas, archivoJson, indent=4)
-        with open('jsons/comentarios.json', 'w') as archivoJson:
+        with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/comentarios.json', 'w') as archivoJson:
             json.dump(comentarios, archivoJson, indent=4)
     input('Ingrese enter para continuar...')
 
@@ -352,7 +350,10 @@ def eliminarComentario(idUsuario):
             encontrada = True
             break
         else:
+            system("cls")
+            print("===================================================")
             print('Error, ingreso un numero que no es suyo o no existe')
+            print("===================================================")
     
     for comentario in comentarios:
         if comentario["id"] == borrar:
@@ -366,9 +367,9 @@ def eliminarComentario(idUsuario):
     #comentario de salida + guardado de jsons
     if encontrada == True:
         print('Borrado con exito')
-        with open('jsons/peliculas.json', 'w') as archivoJson:
+        with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
             json.dump(peliculas, archivoJson, indent=4)
-        with open('jsons/comentarios.json', 'w') as archivoJson:
+        with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/comentarios.json', 'w') as archivoJson:
             json.dump(comentarios, archivoJson, indent=4)
     else:
         print('Error al borrar')
@@ -407,9 +408,9 @@ def modificarComentario(idUsuario):
 
     if encontrada == True:
         print('Modificacion con exito')
-        with open('jsons/peliculas.json', 'w') as archivoJson:
+        with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
             json.dump(peliculas, archivoJson, indent=4)
-        with open('jsons/comentarios.json', 'w') as archivoJson:
+        with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/comentarios.json', 'w') as archivoJson:
             json.dump(comentarios, archivoJson, indent=4)
     else:
         print('Error al modificar')
@@ -442,9 +443,9 @@ def menuDirectores(anterior = None):
 
 #MENU GENEROS
 def menuGeneros(anterior = None):
+    system("cls")
     opcion = 0
     while not(opcion>=1 and opcion<=contador):
-        system("cls")
         contador = 0
         if anterior != None:
             for genero in generos:
