@@ -12,16 +12,6 @@
         ]
     },
     {
-        "id": "2",
-        "titulo": "Shrek",
-        "ano": "2001",
-        "idDirector": "1",
-        "idGenero": "1",
-        "sinopsis": "Un ogro re sarpado",
-        "imagen": "Una imagen re cheta",
-        "idComentarios": []
-    },
-    {
         "id": "3",
         "titulo": "Shrek",
         "ano": "2001",
@@ -155,6 +145,16 @@
         "idGenero": "2",
         "sinopsis": "3",
         "imagen": "4",
+        "idComentarios": []
+    },
+    {
+        "id": "16",
+        "titulo": "mauro",
+        "ano": "2000",
+        "idDirector": "2",
+        "idGenero": "1",
+        "sinopsis": "no se",
+        "imagen": "",
         "idComentarios": []
     }
 ]
