@@ -2,82 +2,25 @@ from flask import Flask, jsonify, Response
 import json
 from os import system
 from http import HTTPStatus
+import requests
 
 app = Flask(__name__)
 
-#Leer JSONs
-with open ('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/usuarios.json','r') as archivoJson:
-    usuarios = json.load(archivoJson)
+# #Leer JSONs
+# with open ('jsons/usuarios.json','r') as archivoJson:
+#     usuarios = json.load(archivoJson)
 
-with open ('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json','r') as archivoJson:
-    peliculas = json.load(archivoJson)
+# with open ('jsons/peliculas.json','r') as archivoJson:
+#     peliculas = json.load(archivoJson)
 
-with open ('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/directores.json','r') as archivoJson:
-    directores = json.load(archivoJson)
+# with open ('jsons/directores.json','r') as archivoJson:
+#     directores = json.load(archivoJson)
 
-with open ('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/generos.json','r') as archivoJson:
-    generos = json.load(archivoJson)
+# with open ('jsons/generos.json','r') as archivoJson:
+#     generos = json.load(archivoJson)
 
-with open ('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/comentarios.json','r') as archivoJson:
-    comentarios = json.load(archivoJson)
-
-#Rutas API
-@app.route("/directores")
-def getDirectores():
-    return jsonify(directores)
-
-@app.route("/generos")
-def getGeneros():
-    return jsonify(generos)
-
-@app.route("/peliculas/director/<id>")
-def getPeliculasByDirector(id):
-    peliculasByDirector = []
-    for pelicula in peliculas:
-        if pelicula["idDirector"] == id:
-            peliculasByDirector.append(pelicula)
-    return jsonify(peliculasByDirector)
-
-@app.route("/peliculas/imagen")
-def getPeliculasByPortada():
-    peliculasByPortada = []
-    for pelicula in peliculas:
-        if pelicula["imagen"] != '':
-            peliculasByPortada.append(pelicula)
-    return jsonify(peliculasByPortada)
-
-#ABM peliculas
-@app.route("/peliculas")
-def getPeliculas():
-    return jsonify(peliculas)
-
-@app.route("/peliculas/save/<id>/titulo/<titulo>/ano/<ano>/idDirector/<idDirector>/sinopsis/<sinopsis>", methods=['PUT'])
-def savePelicula(id,titulo,ano,idDirector,sinopsis):
-    for pelicula in peliculas:
-        if pelicula["id"] == id:
-            pelicula["titulo"] = titulo
-            pelicula["ano"] = ano
-            pelicula["idDirector"] = idDirector
-            pelicula["sinopsis"] = sinopsis
-    with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
-        json.dump(peliculas, archivoJson, indent=4)
-    return jsonify(peliculas)
-
-@app.route("/peliculas/delete/<id>", methods=['DELETE'])
-def deletePelicula(id):
-    for pelicula in peliculas:
-        if pelicula["id"] == id:
-            peliculas.remove(pelicula)
-            with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
-                json.dump(peliculas, archivoJson, indent=4)
-            return jsonify(peliculas)
-
-@app.route("/peliculas/<id>")
-def getPeliculaByCodigo(id):
-    for pelicula in peliculas:
-        if pelicula["id"] == id:
-            return jsonify(pelicula)
-    return Response("{}", status=HTTPStatus.NOT_FOUND)
+# with open ('jsons/comentarios.json','r') as archivoJson:
+#     comentarios = json.load(archivoJson)
 
 #MENU PRINCIPAL
 def MenuBienvenida():
@@ -103,16 +46,30 @@ def opcionIniciarSesion():
         print('=====================')
         print('Inicio sesion usuarios')
         print('=====================')
-        usuarioIngresado = input('Ingrese su usuario: ').lower()
-        contrasenaIngresada =  input('Ingrese su contrasena: ').lower()
+        while True:
+            usuarioIngresado = input('Ingrese su usuario: ').lower()
+            contrasenaIngresada =  input('Ingrese su contrasena: ').lower()
+            if usuarioIngresado == '' or contrasenaIngresada == '':
+                print ('No puede dejar los campos vacios')
+                input('Enter para continuar...')
+                system('cls')
+                continue
+            break
         print('=====================')
-        for usuario in usuarios:
-            if usuario["usuario"] == usuarioIngresado and usuario["contrasena"] == contrasenaIngresada:
-                input('Logeo exitoso!! Enter para continuar!')
-                return usuario["id"]
-        if exitoso==False:
-            print('Error al logear!')
-            input('Enter para volver a intentarlo...')
+        check = requests.get(f'http://127.0.0.1:5000/usuario/{usuarioIngresado}/contrasena/{contrasenaIngresada}')
+        id = check.text
+        if id == 'Error' or id == None:
+            print("=====================")
+            print('Error')
+            print("=====================")
+            input('Enter para continuar...')
+            continue
+        else:
+            print("=====================")
+            print('Logeo exitoso')
+            print("=====================")
+            input('Enter para continuar...')
+            return id
 
 #MENU USUARIO LOGEADO
 def menuUsuario():
@@ -126,32 +83,35 @@ def menuUsuario():
         print('2) Agregar pelicula')
         print('3) Modificar pelicula')
         print('4) Borrar pelicula')
-        print('5) Buscar pelicula por ID o titulo')
+        print('5) Buscar pelicula por ID')
         print('6) Comentarios')
         print('7) Salir/Deslogear')
         print('=====================')
         opcion = int(input('Ingrese opcion: '))
     return opcion
 
-#Opcion 1
+#Opcion 1 MODIFICADO
 def ultimasDiezPeliculas():
     contador = 0
     system("cls")
-    for pelicula in reversed(peliculas):
-        contador = contador + 1
+    peliculasData = requests.get('http://127.0.0.1:5000/ultimasdiezpeliculas')
+    peliculas = peliculasData.json()
+    # for pelicula in reversed(peliculas):
+    for pelicula in peliculas:
+        directorData = requests.get(f'http://127.0.0.1:5000/directores/{pelicula["idDirector"]}')
+        director = directorData.json()
+        generoData = requests.get(f'http://127.0.0.1:5000/generos/{pelicula["idGenero"]}')
+        genero = generoData.json()
         print(f'ID {pelicula["id"]} = La pelicula {pelicula["titulo"]} salio en el año {pelicula["ano"]}, \
-el director fue {directores[int(pelicula["idDirector"])-1]["nombre"]}, el genero es {generos[int(pelicula["idGenero"])-1]["nombre"]}, \
+el director fue {director["nombre"]}, el genero es {genero["nombre"]}, \
 la sinopsis es "{pelicula["sinopsis"]}" y la imagen es {pelicula["imagen"]}')
-        if contador == 10:
-            break
     input('Ingrese enter para continuar...')
 
-#Opcion 2
+#Opcion 2 MODIFICADO
 def agregarPelicula():
     system ("cls")
-    idPeliculaNueva = int(peliculas[-1]["id"]) + 1
     print('=====================')
-    print("registrar pelicula")
+    print("Registrar pelicula")
     print('=====================')
     titulo=input("Ingrese titulo: ")
     while (titulo == ""):
@@ -186,16 +146,17 @@ def agregarPelicula():
         print("Es necesaria una URL de imagen.")
         print('=====================')
         imagen=input("Ingrese URL imagen: ")
-    nuevaPelicula={"id":str(idPeliculaNueva),"titulo":titulo, "ano":ano, "idDirector":idDirector, "idGenero":idGenero, "sinopsis":sinopsis, "imagen":imagen, "idComentarios":[]}
-    peliculas.append(nuevaPelicula)
+    nuevaPelicula={"id":"","titulo":titulo, "ano":ano, "idDirector":idDirector, "idGenero":idGenero, "sinopsis":sinopsis, "imagen":imagen, "idComentarios":[]}
+    datos = requests.post('http://127.0.0.1:5000/peliculas/create', json=nuevaPelicula)
+    mensaje = datos.json
     print("=====================")
-    print("Pelicula registrada correctamente.")
+    print(mensaje)
     print("=====================")
-    with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
-        json.dump(peliculas, archivoJson, indent=4)
+    input('Enter para continuar...')
 
 #Opcion 3
 def modificarPelicula():
+    peliculas = requests.get('http://127.0.0.1:5000/peliculas')
     opcion = 0
     system('cls') 
     print('=====================')
@@ -254,44 +215,39 @@ def modificarPelicula():
                 
     if encontrada == True:
         print('Pelicula modificada exitosamente')
-        with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
+        with open('jsons/peliculas.json', 'w') as archivoJson:
             json.dump(peliculas, archivoJson, indent=4)
     else:
         print('Error')
 
-#Opcion 4
+#Opcion 4 MODIFICADO
 def borrarPelicula():
     encontrada = False
     system("cls")
     print('=====================')
     print('Borrar una pelicula')
     print('=====================')
-    borrar = input('Ingrese el id o el nombre de la pelicula que desea borrar: ')
-    for pelicula in peliculas:
-        if pelicula["id"] == borrar or pelicula["titulo"].lower() == borrar.lower():
-            peliculas.remove(pelicula)
-            encontrada = True
-    if encontrada == False:
-        print('No se pudo borrar porque no existe')
-    else:
-        print('Borrado exitoso')
-    with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
-        json.dump(peliculas, archivoJson, indent=4)
+    borrar = input('Ingrese el id: ')
+    datos = requests.delete(f'http://127.0.0.1:5000/peliculas/delete/{borrar}')
+    mensaje = datos.text
+    print("=====================")
+    print(mensaje)
+    print("=====================")
     input('Ingrese enter para continuar...')
 
-#Opcion 5
+#Opcion 5 MODIFICADO
 def getPeliculaByCodigo():
     system("cls")
-    encontrada = False
-    buscar = input('Ingrese la id o titulo: ')
-    for pelicula in peliculas:
-        if pelicula["id"] == buscar or pelicula["titulo"].lower() == buscar:
-            print(f'ID {pelicula["id"]} = La pelicula {pelicula["titulo"]} salio en el año {pelicula["ano"]}, \
-                el director fue {directores[int(pelicula["idDirector"])-1]["nombre"]}, el genero es {generos[int(pelicula["idGenero"])-1]["nombre"]}\
-                la sinopsis es "{pelicula["sinopsis"]}" y la imagen es {pelicula["imagen"]}')
-            encontrada = True
-    if encontrada == False:
-        print('No fue encontradada')
+    buscar = input('Ingrese la id: ')
+    peliculaData = requests.get(f'http://127.0.0.1:5000/peliculas/{buscar}')
+    pelicula = peliculaData.json()
+    directorData = requests.get(f'http://127.0.0.1:5000/directores/{pelicula["idDirector"]}')
+    director = directorData.json()
+    generoData = requests.get(f'http://127.0.0.1:5000/generos/{pelicula["idGenero"]}')
+    genero = generoData.json()
+    print(f'ID {pelicula["id"]} = La pelicula {pelicula["titulo"]} salio en el año {pelicula["ano"]}, \
+el director fue {director["nombre"]}, el genero es {genero["nombre"]}\
+, la sinopsis es "{pelicula["sinopsis"]}" y la imagen es {pelicula["imagen"]}')
     input('Ingrese enter para continuar...')
 
 #MENU COMENTARIOS OPCION 6
@@ -308,116 +264,140 @@ def menuComentarios():
         opcion = int(input('Ingrese opcion: '))
     return opcion
 
-#Opcion 6 opcion 1
+#Opcion 6 opcion 1 MODIFICADO
 def agregarComentario(idUsuario):
-    encontrada = False
-    agregar = input("Ingrese ID o Nombre de la pelicula: ")
+    peliculasData = requests.get('http://127.0.0.1:5000/peliculas')
+    peliculas = peliculasData.json()
+    agregar = input("Ingrese ID de la pelicula: ")
+    encontrado = False
+    
     for pelicula in peliculas:
-        if pelicula["id"] == agregar or pelicula["titulo"].lower() == agregar:
+        if pelicula["id"] == agregar:
+            encontrado = True
             comentario = input("¿Que comentario quiere agregar?: ")
-            idComentarioNuevo = int(comentarios[-1]["id"]) + 1
-            nuevoComentario={"id":str(idComentarioNuevo),"idUsuario":idUsuario,"comentario":comentario}
-            pelicula["idComentarios"].append(str(idComentarioNuevo))
-            encontrada = True
-            comentarios.append(nuevoComentario)   
-    if encontrada == False:
-        print('Error al intentar crear un nuevo comentario!')
-    else:    
-        print('Comentario exitoso!!')
-        with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
-            json.dump(peliculas, archivoJson, indent=4)
-        with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/comentarios.json', 'w') as archivoJson:
-            json.dump(comentarios, archivoJson, indent=4)
+            nuevoComentario={"id":"","idUsuario":idUsuario,"comentario":comentario}
+            datos = requests.post(f'http://127.0.0.1:5000/comentario/create/idPelicula/{agregar}', json=nuevoComentario)
+            mensaje = datos.text
+            print("=====================")
+            print(mensaje)
+            print("=====================")
+    
+    if encontrado == False:
+        print("=====================")
+        print('Error al crear el comentario')
+        print("=====================")
+            
     input('Ingrese enter para continuar...')
 
 #Opcion 6 opcion 2
 def eliminarComentario(idUsuario):
-    listaComentariosUsuario = []
-    encontrada = False
+    system("cls")
     #Lista de comentarios by idUsuario
-    print('Su lista de comentarios es: ')
-    print('=====================')
-    for comentario in comentarios:
-        if comentario["idUsuario"] == idUsuario:
-            listaComentariosUsuario.append(comentario["id"])
+    comentariosUsuarioData = requests.get(f"http://127.0.0.1:5000/comentario/idUsuario/{idUsuario}")
+    comentariosUsuario = comentariosUsuarioData.json()
+    encontrada = False
+
+    if len(comentariosUsuario) != 0:
+        for comentario in comentariosUsuario:
+            encontrada = True
+            print('Su lista de comentarios es: ')
+            print('=====================')
             print("ID=",comentario["id"],"\nComentario:",comentario["comentario"])
             print('=====================')
-    
-    #Validacion de entrada
-    while True:
-        borrar = input("Ingrese el ID del comentario que desea eliminar: ")
-        if borrar in listaComentariosUsuario:
-            encontrada = True
-            break
-        else:
-            system("cls")
-            print("===================================================")
-            print('Error, ingreso un numero que no es suyo o no existe')
-            print("===================================================")
-    
-    for comentario in comentarios:
-        if comentario["id"] == borrar:
-            comentarios.remove(comentario)
+        
+        #Validacion de entrada
+        while True:
+            borrar = input("Ingrese el ID del comentario que desea eliminar: ")
+            encontrada2 = False
+            for comentario in comentariosUsuario:
+                if borrar == comentario["id"]:
+                    encontrada2 = True
+                    break
 
-    for pelicula in peliculas:
-        for comentarioRecorrido in pelicula["idComentarios"]:
-            if comentarioRecorrido == borrar:
-                pelicula["idComentarios"].remove(comentarioRecorrido)
-                
-    #comentario de salida + guardado de jsons
-    if encontrada == True:
-        print('Borrado con exito')
-        with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
-            json.dump(peliculas, archivoJson, indent=4)
-        with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/comentarios.json', 'w') as archivoJson:
-            json.dump(comentarios, archivoJson, indent=4)
-    else:
-        print('Error al borrar')
+            if encontrada2 == True:
+                break
+            else:
+                system("cls")
+                print("===================================================")
+                print('Error, ingreso un numero que no es suyo o no existe')
+                print("===================================================")
+        
+        datos = requests.delete(f"http://127.0.0.1:5000/comentario/idUsuario/{idUsuario}/delete/{borrar}")
+        mensaje = datos.text
+        print("===================================================")
+        print(mensaje)
+        print("===================================================")
+
+    if encontrada == False:
+        system("cls")
+        print("===================================================")
+        print('No tiene comentarios.')
+        print("===================================================")
+    
     input('Ingrese enter para continuar...')
-
+    
 #Opcion 6 opcion 3
 def modificarComentario(idUsuario):
     listaComentariosUsuario = []
     encontrada = False
     #Lista de comentarios by idUsuario
-    print('Su lista de comentarios es: ')
-    print('=====================')
-    for comentario in comentarios:
-        if comentario["idUsuario"] == idUsuario:
-            listaComentariosUsuario.append(comentario["id"])
-            print("ID=",comentario["id"],"\nComentario:",comentario["comentario"])
-            print('=====================')
+    comentariosUsuarioData = requests.get(f"http://127.0.0.1:5000/comentario/idUsuario/{idUsuario}")
+    comentariosUsuario = comentariosUsuarioData.json()
+
+    encontrada = False
     
-    #Validacion de entrada
-    while True:
-        modificar = input("Ingrese el ID del comentario que desea modificar: ")
-        if modificar in listaComentariosUsuario:
+    
+    if len(comentariosUsuario) != 0:
+        print('Su lista de comentarios es: ')
+        print('=====================')
+        for comentario in comentariosUsuario:
             encontrada = True
-            break
-        else:
-            print('Error, ingreso un numero que no es suyo o no existe')
+            if comentario["idUsuario"] == idUsuario:
+                listaComentariosUsuario.append(comentario["id"])
+                print("ID=",comentario["id"],"\nComentario:",comentario["comentario"])
+                print('=====================')
 
-    while True:
-        comentarioNuevo = input('Ponga su mensaje modificado:\n')
-        if comentarioNuevo != '':
-            break
+        #Validacion de entrada
+        while True:
+            modificar = input("Ingrese el ID del comentario que desea modificar: ")
+            encontrada2 = False
+            for comentario in comentariosUsuario:
+                if modificar == comentario["id"]:
+                    encontrada2 = True
+                    break
 
-    for comentario in comentarios:
-        if comentario["id"] == modificar:
-            comentario["comentario"] = comentarioNuevo
+            if encontrada2 == True:
+                break
+            else:
+                system("cls")
+                print("===================================================")
+                print('Error, ingreso un numero que no es suyo o no existe')
+                print("===================================================")
 
-    if encontrada == True:
-        print('Modificacion con exito')
-        with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/peliculas.json', 'w') as archivoJson:
-            json.dump(peliculas, archivoJson, indent=4)
-        with open('C:/Users/santi/Desktop/final pro2/API-FLASK-PYTHON/jsons/comentarios.json', 'w') as archivoJson:
-            json.dump(comentarios, archivoJson, indent=4)
-    else:
-        print('Error al modificar')
+        while True:
+            comentarioNuevo = input('Ponga su mensaje modificado:')
+            if comentarioNuevo != '':
+                break
+
+        comentarioNuevoLista = {"id":modificar,"idUsuario":idUsuario,"comentario":comentarioNuevo}
+        datos = requests.put('http://127.0.0.1:5000/comentario/save', json=comentarioNuevoLista)
+        mensaje = datos.text
+        print("=====================")
+        print(mensaje)
+        print("=====================")
+
+    if encontrada == False:
+        system("cls")
+        print("===================================================")
+        print('No tiene comentarios.')
+        print("===================================================")
+    
     input('Ingrese enter para continuar...')
 
 #MENU DIRECTORES
 def menuDirectores(anterior = None):
+    directoresData = requests.get('http://127.0.0.1:5000/directores')
+    directores = directoresData.json()
     system("cls")
     opcion = 0
     while not(opcion>=1 and opcion<=contador):
@@ -425,7 +405,7 @@ def menuDirectores(anterior = None):
         if anterior != None:
             for director in directores:
                 if director['id'] == anterior:
-                    print(f'El director actual es {director["nombre"]}')
+                    print(f'El director actual es {director[1]}')
         print('=====================')
         print("Los directores disponibles son:")
         print('=====================')
@@ -443,6 +423,8 @@ def menuDirectores(anterior = None):
 
 #MENU GENEROS
 def menuGeneros(anterior = None):
+    generosData = requests.get('http://127.0.0.1:5000/generos')
+    generos = generosData.json()
     system("cls")
     opcion = 0
     while not(opcion>=1 and opcion<=contador):
@@ -450,7 +432,7 @@ def menuGeneros(anterior = None):
         if anterior != None:
             for genero in generos:
                 if genero['id'] == anterior:
-                    print(f'El genero actual es {genero["nombre"]}')
+                    print(f'El genero actual es {genero[1]}')
         print('=====================')
         print("Los generos disponibles son:")
         print('=====================')
@@ -500,6 +482,7 @@ def main():
             while True:
                 opcion = menuUsuario()
                 if opcion == 1:
+                    print(idUsuario)
                     ultimasDiezPeliculas()
                 if opcion == 2:
                     agregarPelicula()
