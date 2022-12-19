@@ -37,9 +37,10 @@ def opcionIniciarSesion():
         print('=====================')
         check = requests.get(f'http://127.0.0.1:5000/usuario/{usuarioIngresado}/contrasena/{contrasenaIngresada}')
         id = check.text
+        system('cls')
         if id == 'Error' or id == None:
             print("=====================")
-            print('Error')
+            print('Usuario y/o contrasena incorrecta')
             print("=====================")
             input('Enter para continuar...')
             continue
@@ -53,7 +54,7 @@ def opcionIniciarSesion():
 #MENU USUARIO LOGEADO
 def menuUsuario():
     opcion = 0
-    while not(opcion>=1 and opcion<=7):
+    while not(opcion>=1 and opcion<=13):
         system("cls")
         print('=====================')
         print('\tMenu principal')
@@ -63,8 +64,16 @@ def menuUsuario():
         print('3) Modificar pelicula')
         print('4) Borrar pelicula')
         print('5) Buscar pelicula por ID')
-        print('6) Comentarios')
-        print('7) Salir/Deslogear')
+        print('6) Mostrar todas las peliculas')
+        print('7) Mostrar directores')
+        print('8) Mostrar generos')
+        print('9) Mostrar peliculas que tengan portada')
+        print('10) Mostrar peliculas por director')
+        print('11) Comentarios')
+        print('=+=+=SORPRENDEME=+=+=')
+        print('12) Mostar una pelicula random del catalogo')
+        print('=+=+=+=+=+=+=+=+=+=+=')
+        print('13) Salir/Deslogear')
         print('=====================')
         opcion = int(input('Ingrese opcion: '))
     return opcion
@@ -81,9 +90,9 @@ def ultimasDiezPeliculas():
         director = directorData.json()
         generoData = requests.get(f'http://127.0.0.1:5000/generos/{pelicula["idGenero"]}')
         genero = generoData.json()
-        print(f'ID {pelicula["id"]} = La pelicula {pelicula["titulo"]} salio en el año {pelicula["ano"]}, \
+        print(f'ID {pelicula["id"]} = La pelicula "{pelicula["titulo"]}" salio en el año {pelicula["ano"]}, \
 el director fue {director["nombre"]}, el genero es {genero["nombre"]}, \
-la sinopsis es "{pelicula["sinopsis"]}" y la imagen es {pelicula["imagen"]}')
+la sinopsis es "{pelicula["sinopsis"]}" y la imagen es {pelicula["imagen"]}\n')
     input('Ingrese enter para continuar...')
 
 #Opcion 2 MODIFICADO
@@ -119,15 +128,9 @@ def agregarPelicula():
         sinopsis=input("Ingrese sinopsis: ")
     system("cls")
     imagen=input("Ingrese URL imagen: ")
-    while (imagen == ""):
-        system ("cls")
-        print('=====================')
-        print("Es necesaria una URL de imagen.")
-        print('=====================')
-        imagen=input("Ingrese URL imagen: ")
     nuevaPelicula={"id":"","titulo":titulo, "ano":ano, "idDirector":idDirector, "idGenero":idGenero, "sinopsis":sinopsis, "imagen":imagen, "idComentarios":[]}
     datos = requests.post('http://127.0.0.1:5000/peliculas/create', json=nuevaPelicula)
-    mensaje = datos.json
+    mensaje = datos.text
     print("=====================")
     print(mensaje)
     print("=====================")
@@ -139,7 +142,7 @@ def modificarPelicula():
     opcion = 0
     encontrada = False
 
-    peliculaNuevaDiccionario = {"id":"","titulo":"","ano":"","idDirector":"","idGenero":"","sinopsis":"","imagen":""}
+    peliculaNuevaDiccionario = {"id":"","titulo":"","ano":"","idDirector":"","idGenero":"","sinopsis":"","imagen":"no cargado"}
 
     system('cls') 
     print('=====================')
@@ -154,7 +157,7 @@ def modificarPelicula():
             encontrada = True
             while opcion != 7:
                 opcion = menuModificar()
-                peliculaNuevaDiccionario = {"id":"","titulo":"","ano":"","idDirector":"","idGenero":"","sinopsis":"","imagen":""}
+                peliculaNuevaDiccionario = {"id":"","titulo":"","ano":"","idDirector":"","idGenero":"","sinopsis":"","imagen":"no cargado"}
                 if opcion == 1:
                     while True:
                         valor = input(f"El titulo actualmente es '{pelicula['titulo']}', Cual es el titulo modificado?:")
@@ -186,56 +189,90 @@ def modificarPelicula():
                 elif opcion == 6:
                     while True:
                         valor= input(f"El imagen es '{pelicula['imagen']}', Cual es la imagen modificada?:")
-                        if valor != '':
-                            peliculaNuevaDiccionario['imagen']  = valor
-                            break
-                        else:
-                            print('Error, ponga minimo una letra')
+                        peliculaNuevaDiccionario['imagen']  = valor
 
-                peliculaNuevaDiccionario["id"] = modificar
-                datos = requests.put(f'http://127.0.0.1:5000/peliculas/save/', json=peliculaNuevaDiccionario)
-                mensaje = datos.text
-                print("=====================")
-                print(mensaje)
-                print("=====================")
-                input('Enter para continuar...')
+                elif opcion == 7:
+                    print("=====================")
+                    print('Usted esta saliendo del menu de modificacion')
+                    print("=====================")
+                    break
+                if opcion >= 1 and opcion <=6:
+                    peliculaNuevaDiccionario["id"] = modificar
+                    datos = requests.put(f'http://127.0.0.1:5000/peliculas/save/', json=peliculaNuevaDiccionario)
+                    mensaje = datos.text
+                    print("=====================")
+                    print(mensaje)
+                    print("=====================")
+                    input('Enter para continuar...')
     
     if encontrada == False:
         system("cls")
         print("===================================================")
-        print('No hay peliculas.')
+        print('No existe una pelicula con esa ID')
         print("===================================================")
-    
-    input('Ingrese enter para continuar...')
+        input('Ingrese enter para continuar...')
 
 #Opcion 4 MODIFICADO
-def borrarPelicula():
-    encontrada = False
+def borrarPelicula(idUsuario):
     system("cls")
     print('=====================')
     print('Borrar una pelicula')
     print('=====================')
-    borrar = input('Ingrese el id: ')
-    datos = requests.delete(f'http://127.0.0.1:5000/peliculas/delete/{borrar}')
-    mensaje = datos.text
-    print("=====================")
-    print(mensaje)
-    print("=====================")
+    borrar = input('Ingrese el id(0 para salir): ')
+    if borrar != '0':
+        datos = requests.delete(f'http://127.0.0.1:5000/peliculas/delete/{borrar}/idUsuario/{idUsuario}')
+        mensaje = datos.text
+        print("=====================")
+        print(mensaje)
+        print("=====================")
+    else:
+        system("cls")
+        print("===================================================")
+        print('Usted cancelo la eliminacion')
+        print("===================================================")
     input('Ingrese enter para continuar...')
 
 #Opcion 5 MODIFICADO
 def getPeliculaByCodigo():
     system("cls")
-    buscar = input('Ingrese la id: ')
-    peliculaData = requests.get(f'http://127.0.0.1:5000/peliculas/{buscar}')
-    pelicula = peliculaData.json()
-    directorData = requests.get(f'http://127.0.0.1:5000/directores/{pelicula["idDirector"]}')
-    director = directorData.json()
-    generoData = requests.get(f'http://127.0.0.1:5000/generos/{pelicula["idGenero"]}')
-    genero = generoData.json()
-    print(f'ID {pelicula["id"]} = La pelicula {pelicula["titulo"]} salio en el año {pelicula["ano"]}, \
+    encontrada = False
+    buscar = input('Ingrese id: ')
+    peliculaData = requests.get('http://127.0.0.1:5000/peliculas')
+    peliculas = peliculaData.json()
+    for pelicula in peliculas:
+        if pelicula['id'] == buscar:
+            peliculaBuscada = pelicula
+            encontrada = True
+            break
+        if encontrada == True:
+            break
+    if encontrada == True:
+        directorData = requests.get(f'http://127.0.0.1:5000/directores/{pelicula["idDirector"]}')
+        director = directorData.json()
+        generoData = requests.get(f'http://127.0.0.1:5000/generos/{pelicula["idGenero"]}')
+        genero = generoData.json()
+
+        print(f'ID {peliculaBuscada["id"]} = La pelicula "{peliculaBuscada["titulo"]}" salio en el año {peliculaBuscada["ano"]}, \
 el director fue {director["nombre"]}, el genero es {genero["nombre"]}\
-, la sinopsis es "{pelicula["sinopsis"]}" y la imagen es {pelicula["imagen"]}')
+, la sinopsis es "{pelicula["sinopsis"]}" y la imagen es {peliculaBuscada["imagen"]}\n')
+        contador = 0
+
+        print("=====================")
+        print('COMENTARIOS')
+        print("=====================")
+        if peliculaBuscada['idComentarios'] != []:
+            for comentarioActual in peliculaBuscada['idComentarios']:
+                comentarioData = requests.get(f'http://127.0.0.1:5000/comentario/{comentarioActual}')
+                comentario = comentarioData.json()
+                contador = contador + 1
+                print(f'{contador}) {comentario["comentario"]}')
+            print('')
+        else:
+            print('Esta pelicula no tiene comentarios\n')
+    else:
+        print("=====================")
+        print('Error al buscar comentario, no encontrado')
+        print("=====================")
     input('Ingrese enter para continuar...')
 
 #MENU COMENTARIOS OPCION 6
@@ -295,26 +332,33 @@ def eliminarComentario(idUsuario):
         
         #Validacion de entrada
         while True:
-            borrar = input("Ingrese el ID del comentario que desea eliminar: ")
-            encontrada2 = False
-            for comentario in comentariosUsuario:
-                if borrar == comentario["id"]:
-                    encontrada2 = True
-                    break
+            borrar = input("Ingrese el ID del comentario que desea eliminar(0 para salir): ")
+            if borrar != '0':
+                encontrada2 = False
+                for comentario in comentariosUsuario:
+                    if borrar == comentario["id"]:
+                        encontrada2 = True
+                        break
 
-            if encontrada2 == True:
-                break
+                if encontrada2 == True:
+                    break
+                else:
+                    system("cls")
+                    print("===================================================")
+                    print('Error, ingreso un numero que no es suyo o no existe')
+                    print("===================================================")
             else:
                 system("cls")
                 print("===================================================")
-                print('Error, ingreso un numero que no es suyo o no existe')
+                print('Usted cancelo la eliminacion')
                 print("===================================================")
-        
-        datos = requests.delete(f"http://127.0.0.1:5000/comentario/idUsuario/{idUsuario}/delete/{borrar}")
-        mensaje = datos.text
-        print("===================================================")
-        print(mensaje)
-        print("===================================================")
+
+        if borrar != 0:
+            datos = requests.delete(f"http://127.0.0.1:5000/comentario/idUsuario/{idUsuario}/delete/{borrar}")
+            mensaje = datos.text
+            print("===================================================")
+            print(mensaje)
+            print("===================================================")
 
     if encontrada == False:
         system("cls")
@@ -323,7 +367,7 @@ def eliminarComentario(idUsuario):
         print("===================================================")
     
     input('Ingrese enter para continuar...')
-    
+
 #Opcion 6 opcion 3 MODIFICADO
 def modificarComentario(idUsuario):
     listaComentariosUsuario = []
@@ -444,6 +488,7 @@ def getDirectores():
     print('=====================')
     for director in directores:
         print(f'{director["id"]}) {director["nombre"]}')
+    input('Ingrese enter para continuar...')
 
 def getGeneros():
     generosData = requests.get('http://127.0.0.1:5000/generos')
@@ -454,6 +499,107 @@ def getGeneros():
     print('=====================')
     for genero in generos:
         print(f'{genero["id"]}) {genero["nombre"]}')
+    input('Ingrese enter para continuar...')
+
+def getPeliculaByDirector():
+    encontrada = False
+    directoresData = requests.get('http://127.0.0.1:5000/directores')
+    directores = directoresData.json()
+
+    idDirector = input('Ingrese la id del director: ')
+    
+    system('cls')
+    for director in directores:
+        if director['id'] == idDirector:
+            encontrada = True
+            break
+        if encontrada == True:
+            break
+
+    if encontrada == True:
+        peliculasByDirectorData = requests.get(f'http://127.0.0.1:5000/peliculas/director/{idDirector}')
+        peliculasByDirector = peliculasByDirectorData.json()
+        print('=====================')
+        print("Las peliculas segun el director es:")
+        print('=====================')
+        for pelicula in peliculasByDirector:
+            generoData = requests.get(f'http://127.0.0.1:5000/generos/{pelicula["idGenero"]}')
+            genero = generoData.json()
+            print(f'ID {pelicula["id"]} = La pelicula "{pelicula["titulo"]}" salio en el año {pelicula["ano"]}, el genero es {genero["nombre"]}\
+, la sinopsis es "{pelicula["sinopsis"]}" y la imagen es {pelicula["imagen"]}')
+    else:
+        print('=====================')
+        print("Director no encontrado")
+        print('=====================')
+    input('Ingrese enter para continuar...')
+
+def getPeliculaByPortada():
+    peliculasByPortadaData = requests.get(f'http://127.0.0.1:5000/peliculas/imagen')
+    peliculasByPortada = peliculasByPortadaData.json()
+    print('=====================')
+    print("Las peliculas con portada son:")
+    print('=====================')
+    for pelicula in peliculasByPortada:
+        directorData = requests.get(f'http://127.0.0.1:5000/directores/{pelicula["idDirector"]}')
+        director = directorData.json()
+        generoData = requests.get(f'http://127.0.0.1:5000/generos/{pelicula["idGenero"]}')
+        genero = generoData.json()
+        print(f'ID {pelicula["id"]} = La pelicula "{pelicula["titulo"]}" salio en el año {pelicula["ano"]}, \
+el director fue {director["nombre"]}, el genero es {genero["nombre"]}\
+, la sinopsis es "{pelicula["sinopsis"]}" y la imagen es {pelicula["imagen"]}')
+    input('Ingrese enter para continuar...')
+
+def getPeliculas():
+    peliculasData = requests.get('http://127.0.0.1:5000/peliculas')
+    peliculas = peliculasData.json()
+    system('cls')
+    print('=====================')
+    print("Las peliculas son:")
+    print('=====================')
+    for pelicula in peliculas:
+        directorData = requests.get(f'http://127.0.0.1:5000/directores/{pelicula["idDirector"]}')
+        director = directorData.json()
+        generoData = requests.get(f'http://127.0.0.1:5000/generos/{pelicula["idGenero"]}')
+        genero = generoData.json()
+        print(f'ID {pelicula["id"]} = La pelicula "{pelicula["titulo"]}" salio en el año {pelicula["ano"]}, \
+el director fue {director["nombre"]}, el genero es {genero["nombre"]}\
+, la sinopsis es "{pelicula["sinopsis"]}" y la imagen es {pelicula["imagen"]}\n')
+    input('Ingrese enter para continuar...')
+    input('Ingrese enter para continuar...')
+
+def getPeliculaRandom():
+    system('cls')
+
+    peliculaData = requests.get('http://127.0.0.1:5000/pelicularandom')
+    pelicula = peliculaData.json()
+
+    print('=====================')
+    print(f"La pelicula random es: {pelicula['titulo']}")
+    print('=====================')
+
+    directorData = requests.get(f'http://127.0.0.1:5000/directores/{pelicula["idDirector"]}')
+    director = directorData.json()
+    generoData = requests.get(f'http://127.0.0.1:5000/generos/{pelicula["idGenero"]}')
+    genero = generoData.json()
+
+    print(f'ID {pelicula["id"]} = La pelicula "{pelicula["titulo"]}" salio en el año {pelicula["ano"]}, \
+el director fue {director["nombre"]}, el genero es {genero["nombre"]}\
+, la sinopsis es "{pelicula["sinopsis"]}" y la imagen es {pelicula["imagen"]}\n')
+    contador = 0
+
+    print("=====================")
+    print('COMENTARIOS')
+    print("=====================")
+    if pelicula['idComentarios'] != []:
+        for comentarioActual in pelicula['idComentarios']:
+            comentarioData = requests.get(f'http://127.0.0.1:5000/comentario/{comentarioActual}')
+            comentario = comentarioData.json()
+            contador = contador + 1
+            print(f'{contador}) {comentario["comentario"]}')
+        print('')
+    else:
+        print('Esta pelicula no tiene comentarios\n')
+    input('Ingrese enter para continuar...')
 
 #MENU MODIFICAR 
 def menuModificar():
